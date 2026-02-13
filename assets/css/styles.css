@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --bg: #ffffff;
   --bg-subtle: #f9f8f6;
   --text: #1f1f1f;
@@ -12,6 +12,49 @@
   --radius-md: 14px;
   --radius-lg: 20px;
   --shadow: 0 12px 40px rgba(10, 12, 14, 0.08);
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(22px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes counterBump {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 * {
@@ -46,6 +89,15 @@ input,
 textarea,
 select {
   font: inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+a:focus-visible {
+  outline: 2px solid rgba(241, 90, 34, 0.7);
+  outline-offset: 2px;
 }
 
 .container {
@@ -179,6 +231,10 @@ select {
   font-size: 12px;
 }
 
+[data-cart-count].is-bump {
+  animation: counterBump 0.22s ease;
+}
+
 .hero {
   color: #fff;
   background: radial-gradient(circle at 18% 22%, #323232 0%, #171717 40%, #0d0d0d 100%);
@@ -204,6 +260,26 @@ select {
   font-weight: 600;
 }
 
+.hero-copy > * {
+  animation: riseIn 0.5s ease both;
+}
+
+.hero-copy .hero-subtitle {
+  animation-delay: 0.05s;
+}
+
+.hero-copy h1 {
+  animation-delay: 0.12s;
+}
+
+.hero-copy p {
+  animation-delay: 0.18s;
+}
+
+.hero-copy .hero-actions {
+  animation-delay: 0.24s;
+}
+
 .hero-copy p {
   margin: 12px 0 0;
   color: rgba(255, 255, 255, 0.83);
@@ -227,12 +303,21 @@ select {
   overflow: hidden;
   aspect-ratio: 4 / 5;
   background: #111;
+  transform-origin: center;
+  animation: popIn 0.45s ease both;
+  animation-delay: calc(var(--stagger, 0) * 0.05s);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
 }
 
 .banner-card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.banner-card:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 14px 26px rgba(7, 7, 7, 0.28);
 }
 
 .catalog {
@@ -270,6 +355,9 @@ select {
   overflow-x: auto;
   padding-bottom: 8px;
   margin-bottom: 14px;
+  scrollbar-width: thin;
+  scroll-snap-type: x proximity;
+  mask-image: linear-gradient(to right, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
 }
 
 .category-chip {
@@ -280,6 +368,13 @@ select {
   white-space: nowrap;
   cursor: pointer;
   font-weight: 500;
+  scroll-snap-align: start;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.category-chip:hover {
+  border-color: #d8cec3;
+  background: #fff8f4;
 }
 
 .category-chip.is-active {
@@ -302,11 +397,17 @@ select {
   background: #fff;
   transition: transform 0.18s ease, box-shadow 0.18s ease;
   cursor: pointer;
+  animation: riseIn 0.38s ease both;
+  animation-delay: calc(var(--stagger, 0) * 0.018s);
 }
 
 .product-card:hover {
   transform: translateY(-1px);
   box-shadow: var(--shadow);
+}
+
+.product-card:hover .product-card__image {
+  transform: scale(1.04);
 }
 
 .product-card__image-wrap {
@@ -319,6 +420,7 @@ select {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.35s ease;
 }
 
 .product-card__badge {
@@ -443,6 +545,7 @@ select {
   padding: 13px 18px;
   box-shadow: 0 16px 36px rgba(236, 103, 34, 0.35);
   cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .cart-drawer {
@@ -452,6 +555,7 @@ select {
   background: rgba(15, 15, 15, 0.45);
   display: flex;
   justify-content: flex-end;
+  backdrop-filter: blur(1.5px);
 }
 
 .cart-drawer__panel {
@@ -462,6 +566,10 @@ select {
   display: grid;
   grid-template-rows: auto 1fr auto auto;
   gap: 14px;
+}
+
+.cart-drawer.is-entering .cart-drawer__panel {
+  animation: slideInRight 0.22s ease;
 }
 
 .cart-drawer header {
@@ -595,11 +703,19 @@ select {
 .success-overlay {
   position: fixed;
   inset: 0;
-  z-index: 90;
   display: grid;
   place-items: center;
   background: rgba(20, 20, 20, 0.58);
   padding: 18px;
+  backdrop-filter: blur(2px);
+}
+
+.product-modal {
+  z-index: 95;
+}
+
+.success-overlay {
+  z-index: 110;
 }
 
 .product-modal__card {
@@ -610,6 +726,10 @@ select {
   position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
+}
+
+.product-modal.is-entering .product-modal__card {
+  animation: popIn 0.2s ease;
 }
 
 .product-modal__close {
@@ -653,6 +773,10 @@ select {
   border-radius: var(--radius-lg);
   padding: 26px;
   text-align: center;
+}
+
+.success-overlay.is-entering .success-card {
+  animation: popIn 0.2s ease;
 }
 
 .success-card h2 {
@@ -701,8 +825,16 @@ select {
 }
 
 .is-cart-open,
-.is-modal-open {
+.is-modal-open,
+.is-success-open {
   overflow: hidden;
+}
+
+.is-cart-open .cart-float,
+.is-success-open .cart-float {
+  opacity: 0;
+  transform: translateY(16px);
+  pointer-events: none;
 }
 
 .admin-body {

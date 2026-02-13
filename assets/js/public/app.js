@@ -7,6 +7,9 @@ import {
   closeCartDrawer,
   closeProductModal,
   hideSuccessOverlay,
+  isCartDrawerOpen,
+  isProductModalOpen,
+  isSuccessOverlayOpen,
   openCartDrawer,
   openProductModal,
   renderBanners,
@@ -75,6 +78,7 @@ function refreshCart() {
 
 function bindEvents() {
   document.addEventListener("click", onDocumentClick);
+  document.addEventListener("keydown", onDocumentKeydown);
 
   const searchInput = document.querySelector("[data-search]");
   if (searchInput) {
@@ -104,6 +108,10 @@ function bindEvents() {
 }
 
 async function onDocumentClick(event) {
+  if (isSuccessOverlayOpen() && !event.target.closest("[data-success-overlay]")) {
+    return;
+  }
+
   const categoryButton = event.target.closest("[data-category]");
   if (categoryButton) {
     state.categoryCode = categoryButton.dataset.category || "";
@@ -215,7 +223,11 @@ async function onDocumentClick(event) {
 
   if (event.target.closest("[data-success-close]")) {
     hideSuccessOverlay();
-    closeCartDrawer();
+    return;
+  }
+
+  if (event.target.matches("[data-success-overlay]")) {
+    hideSuccessOverlay();
     return;
   }
 
@@ -226,6 +238,26 @@ async function onDocumentClick(event) {
 
   if (event.target.matches("[data-product-modal]")) {
     closeProductModal();
+  }
+}
+
+function onDocumentKeydown(event) {
+  if (event.key !== "Escape") {
+    return;
+  }
+
+  if (isSuccessOverlayOpen()) {
+    hideSuccessOverlay();
+    return;
+  }
+
+  if (isProductModalOpen()) {
+    closeProductModal();
+    return;
+  }
+
+  if (isCartDrawerOpen()) {
+    closeCartDrawer();
   }
 }
 

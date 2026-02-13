@@ -43,8 +43,8 @@ export function renderBanners(banners = []) {
 
   container.innerHTML = list
     .map(
-      (banner) => `
-      <article class="banner-card">
+      (banner, index) => `
+      <article class="banner-card" style="--stagger:${index}">
         <img src="${escapeHtml(banner.image)}" alt="${escapeHtml(banner.title || "Акция")}" loading="lazy" />
       </article>
     `,
@@ -79,10 +79,10 @@ export function renderProducts(result = { items: [], pagination: null }) {
   }
 
   container.innerHTML = result.items
-    .map((product) => {
+    .map((product, index) => {
       const tags = (product.tags || []).slice(0, 2);
       return `
-      <article class="product-card" data-open-product="${escapeHtml(product.code)}">
+      <article class="product-card" style="--stagger:${index}" data-open-product="${escapeHtml(product.code)}">
         <div class="product-card__image-wrap">
           <img class="product-card__image" src="${escapeHtml(product.imageUrl || "")}" alt="${escapeHtml(product.name)}" loading="lazy" />
           ${!product.isAvailable ? '<span class="product-card__badge">Недоступно</span>' : ""}
@@ -219,6 +219,8 @@ export function openProductModal(product) {
     addButton.textContent = product.isAvailable ? "Добавить в корзину" : "Недоступно";
   }
 
+  hideSuccessOverlay();
+  animateOverlay(modal);
   modal.hidden = false;
   document.body.classList.add("is-modal-open");
 }
@@ -229,15 +231,21 @@ export function closeProductModal() {
     return;
   }
   modal.hidden = true;
+  modal.classList.remove("is-entering");
   document.body.classList.remove("is-modal-open");
 }
 
 export function updateCartCounter(count) {
-  const node = document.querySelector("[data-cart-count]");
-  if (!node) {
+  const nodes = document.querySelectorAll("[data-cart-count]");
+  if (!nodes.length) {
     return;
   }
-  node.textContent = String(count);
+  for (const node of nodes) {
+    node.textContent = String(count);
+    node.classList.remove("is-bump");
+    void node.offsetWidth;
+    node.classList.add("is-bump");
+  }
 }
 
 export function openCartDrawer() {
@@ -245,6 +253,7 @@ export function openCartDrawer() {
   if (!drawer) {
     return;
   }
+  animateOverlay(drawer);
   drawer.hidden = false;
   document.body.classList.add("is-cart-open");
 }
@@ -255,6 +264,7 @@ export function closeCartDrawer() {
     return;
   }
   drawer.hidden = true;
+  drawer.classList.remove("is-entering");
   document.body.classList.remove("is-cart-open");
 }
 
@@ -263,8 +273,13 @@ export function showSuccessOverlay(orderNumber) {
   if (!overlay) {
     return;
   }
+  // Success screen should be the single active layer after checkout.
+  closeProductModal();
+  closeCartDrawer();
   overlay.querySelector("[data-success-order]").textContent = orderNumber;
+  animateOverlay(overlay);
   overlay.hidden = false;
+  document.body.classList.add("is-success-open");
 }
 
 export function hideSuccessOverlay() {
@@ -273,4 +288,27 @@ export function hideSuccessOverlay() {
     return;
   }
   overlay.hidden = true;
+  overlay.classList.remove("is-entering");
+  document.body.classList.remove("is-success-open");
+}
+
+export function isProductModalOpen() {
+  const modal = document.querySelector("[data-product-modal]");
+  return Boolean(modal && !modal.hidden);
+}
+
+export function isCartDrawerOpen() {
+  const drawer = document.querySelector("[data-cart-drawer]");
+  return Boolean(drawer && !drawer.hidden);
+}
+
+export function isSuccessOverlayOpen() {
+  const overlay = document.querySelector("[data-success-overlay]");
+  return Boolean(overlay && !overlay.hidden);
+}
+
+function animateOverlay(element) {
+  element.classList.remove("is-entering");
+  void element.offsetWidth;
+  element.classList.add("is-entering");
 }
