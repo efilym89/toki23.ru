@@ -101,7 +101,10 @@ node --test tests/*.test.mjs
 
 ## Деплой на GitHub Pages
 - `.github/workflows/deploy-pages.yml`
-- При пуше в `main` собирается `dist` через `scripts/prepare_pages.py` и публикуется в Pages.
+- При пуше в `main` собирается `dist` через `scripts/prepare_pages.py` и публикуется в ветку `gh-pages`.
+- В настройках репозитория откройте `Settings -> Pages` и установите:
+  - Source: `Deploy from a branch`
+  - Branch: `gh-pages` / `/ (root)`
 
 После первого деплоя ссылка будет в `Actions -> Deploy Pages`.
 

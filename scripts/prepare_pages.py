@@ -38,6 +38,7 @@ def main() -> int:
         "window.APP_CONFIG = { DATA_PROVIDER: 'local', ADMIN_LOGIN: 'admin', ADMIN_PASSWORD: 'admin123' };\n",
         encoding="utf-8",
     )
+    (DIST / ".nojekyll").write_text("", encoding="utf-8")
 
     print(f"Prepared {DIST}")
     return 0

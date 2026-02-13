@@ -19,5 +19,8 @@ Thumbs.db
 # Test artifacts
 playwright-report/
 coverage/
+
+# Temporary local debug files
+.tmp*
 # Build output
 dist/
