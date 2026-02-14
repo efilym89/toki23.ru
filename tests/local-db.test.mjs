@@ -1,6 +1,7 @@
-﻿import test from "node:test";
+import test from "node:test";
 import assert from "node:assert/strict";
 import { createLocalDb } from "../assets/js/data/local-db.js";
+import { STORAGE_KEYS } from "../assets/js/shared/constants.js";
 
 function createMemoryStorage() {
   const map = new Map();
@@ -92,3 +93,30 @@ test("local-db admin auth", async () => {
   db.logoutAdmin();
   assert.equal(db.getCurrentAdmin(), null);
 });
+
+test("local-db recovers from stale or broken cached snapshot", async () => {
+  const storage = createMemoryStorage();
+  storage.setItem(
+    STORAGE_KEYS.DB,
+    JSON.stringify({
+      meta: {},
+      categories: [],
+      products: [],
+      users: [],
+      orders: null,
+      actionLogs: null,
+    }),
+  );
+
+  const db = createLocalDb({ storage, fetchSeed: async () => seed });
+  await db.init();
+
+  const categories = db.getCategories();
+  const products = db.getProducts({ page: 1, pageSize: 10 });
+  assert.ok(categories.length > 0);
+  assert.ok(products.items.length > 0);
+
+  const session = db.loginAdmin("admin", "admin123");
+  assert.equal(session.role, "admin");
+});
+
