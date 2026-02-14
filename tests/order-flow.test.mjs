@@ -43,12 +43,16 @@ const seed = {
 test("order flow creates order, updates status and report", async () => {
   const storage = createMemoryStorage();
   let nowCounter = 0;
+  const baseDay = new Date();
+  baseDay.setHours(12, 0, 0, 0);
   const db = createLocalDb({
     storage,
     fetchSeed: async () => seed,
     now: () => {
       nowCounter += 1;
-      return new Date(2026, 1, 13, 12, nowCounter, 0).toISOString();
+      const stamp = new Date(baseDay);
+      stamp.setMinutes(stamp.getMinutes() + nowCounter);
+      return stamp.toISOString();
     },
   });
 

@@ -51,6 +51,10 @@ async function boot() {
 
   await loadProducts();
   refreshCart();
+  // Ensure no stale overlays are visible on initial load.
+  hideSuccessOverlay();
+  closeProductModal();
+  closeCartDrawer();
   bindEvents();
   handleProductFromUrl();
 }
@@ -306,8 +310,16 @@ async function onCheckoutSubmit(event) {
     state.method = "pickup";
     renderOrderMethods(state.method);
     setDeliveryAddressVisibility(state.method);
-    showSuccessOverlay(order.number);
-    toast(`Заказ ${order.number} принят`, "success");
+
+    if (order.isPaid) {
+      showSuccessOverlay(order.number);
+      toast(`Заказ ${order.number} оплачен`, "success");
+    } else {
+      hideSuccessOverlay();
+      closeProductModal();
+      closeCartDrawer();
+      toast(`Заказ ${order.number} оформлен и ожидает оплаты`, "success");
+    }
   } catch (error) {
     console.error(error);
     toast(error.message || "Не удалось оформить заказ", "error");
