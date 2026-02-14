@@ -35,6 +35,9 @@ const state = {
 };
 
 const cart = createCartStore();
+function getCartQty(productId) {
+  return cart.getItems().filter((item) => item.productId === productId).reduce((sum, item) => sum + item.qty, 0);
+}
 
 async function boot() {
   await initRepository();
@@ -152,7 +155,7 @@ async function onDocumentClick(event) {
       return;
     }
 
-    openProductModal(product);
+    openProductModal(product, { qty: getCartQty(product.id) });
     return;
   }
 
@@ -166,15 +169,30 @@ async function onDocumentClick(event) {
     if (!product) {
       return;
     }
-    cart.add(product, 1);
+    const modal = document.querySelector("[data-product-modal]");
+    const modName = modal?.dataset.selectedModification || "";
+    cart.add(product, 1, modName ? { name: modName } : null);
     refreshCart();
-    closeProductModal();
+    const qty = getCartQty(product.id);
+    openProductModal(product, { qty, selectedModification: modName });
     toast(`Добавили: ${product.name}`, "success");
     return;
   }
 
   if (event.target.closest("[data-product-close]")) {
     closeProductModal();
+    return;
+  }
+
+  const modBtn = event.target.closest("[data-modification-btn]");
+  if (modBtn) {
+    const all = document.querySelectorAll("[data-modification-btn]");
+    all.forEach((btn) => btn.classList.remove("is-active"));
+    modBtn.classList.add("is-active");
+    const modal = document.querySelector("[data-product-modal]");
+    if (modal) {
+      modal.dataset.selectedModification = modBtn.dataset.modificationBtn || modBtn.textContent;
+    }
     return;
   }
 
@@ -337,7 +355,7 @@ async function handleProductFromUrl() {
 
   const product = await getRepository().getProductByCode(productCode);
   if (product) {
-    openProductModal(product);
+    openProductModal(product, { qty: getCartQty(product.id) });
   }
 }
 

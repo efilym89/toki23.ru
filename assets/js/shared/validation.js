@@ -58,9 +58,15 @@ export function validateProduct(payload) {
     description: z.string().trim().optional().or(z.literal("")),
     categoryCode: z.string().trim().min(2, "Категория обязательна"),
     price: z.number().int().min(1, "Цена должна быть больше 0"),
+    weight: z.number().int().nonnegative().optional().or(z.literal(null)),
+    calories: z.number().int().nonnegative().optional().or(z.literal(null)),
+    proteins: z.number().int().nonnegative().optional().or(z.literal(null)),
+    fats: z.number().int().nonnegative().optional().or(z.literal(null)),
+    carbs: z.number().int().nonnegative().optional().or(z.literal(null)),
     imageUrl: z.string().trim().url("Нужен корректный URL изображения").optional().or(z.literal("")),
     isAvailable: z.boolean(),
     sortOrder: z.number().int().min(1),
+    tags: z.array(z.object({ code: z.string(), text: z.string() })).optional().or(z.literal([])),
   });
 
   const result = schema.safeParse(payload);

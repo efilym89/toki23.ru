@@ -129,8 +129,24 @@
         <button class="icon-btn product-modal__close" data-product-close>✕</button>
         <img data-product-image alt="product" />
         <div class="product-modal__body">
-          <h3 data-product-name></h3>
-          <p data-product-description></p>
+          <div class="product-modal__header">
+            <div>
+              <h3 data-product-name></h3>
+              <p class="product-modal__weight" data-product-weight></p>
+            </div>
+            <div class="tag-row" data-product-tags></div>
+          </div>
+          <p data-product-description class="product-modal__description"></p>
+
+          <div class="product-modal__section" data-product-modifications hidden>
+            <h4>Размер</h4>
+            <div class="pill-row" data-modifications-list></div>
+          </div>
+
+          <div class="product-modal__section" data-product-nutrition hidden>
+            <div class="nutrition-grid" data-nutrition-list></div>
+          </div>
+
           <div class="product-modal__footer">
             <strong data-product-price></strong>
             <button class="btn" data-product-add>Добавить в корзину</button>

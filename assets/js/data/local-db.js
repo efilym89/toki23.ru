@@ -1,4 +1,4 @@
-﻿import { getAppConfig } from "../app-config.js";
+import { getAppConfig } from "../app-config.js";
 import { LOG_ACTION, ORDER_METHOD, ORDER_STATUS, STORAGE_KEYS } from "../shared/constants.js";
 import {
   clampPage,
@@ -34,6 +34,9 @@ function defaultDb(config, seed = null) {
     oldPrice: item.oldPrice ? toNumber(item.oldPrice, 0) : null,
     weight: item.weight ? toNumber(item.weight, 0) : null,
     calories: item.calories ? toNumber(item.calories, 0) : null,
+    proteins: item.proteins ? toNumber(item.proteins, 0) : null,
+    fats: item.fats ? toNumber(item.fats, 0) : null,
+    carbs: item.carbs ? toNumber(item.carbs, 0) : null,
     volume: item.volume ? toNumber(item.volume, 0) : null,
     imageUrl: item.imageUrl || item.images?.[0] || "",
     images: item.images || [],
@@ -273,13 +276,16 @@ export function createLocalDb(options = {}) {
       categoryCodes: [input.categoryCode],
       price: toNumber(input.price, 0),
       oldPrice: input.oldPrice ? toNumber(input.oldPrice, 0) : null,
+      weight: input.weight ? toNumber(input.weight, 0) : null,
+      calories: input.calories ? toNumber(input.calories, 0) : null,
+      proteins: input.proteins ? toNumber(input.proteins, 0) : null,
+      fats: input.fats ? toNumber(input.fats, 0) : null,
+      carbs: input.carbs ? toNumber(input.carbs, 0) : null,
       imageUrl: input.imageUrl || "",
       images: input.images || (input.imageUrl ? [input.imageUrl] : []),
       media: input.media || (input.imageUrl ? [input.imageUrl] : []),
       isAvailable: input.isAvailable !== false,
       sortOrder: toNumber(input.sortOrder, 9999),
-      weight: input.weight ? toNumber(input.weight, 0) : null,
-      calories: input.calories ? toNumber(input.calories, 0) : null,
       volume: input.volume ? toNumber(input.volume, 0) : null,
       tags: input.tags || [],
       modifications: input.modifications || [],

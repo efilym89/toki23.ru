@@ -1,4 +1,4 @@
-﻿import { ORDER_METHOD_LABELS } from "../shared/constants.js";
+import { ORDER_METHOD_LABELS, NUTRITION_KEYS } from "../shared/constants.js";
 import { escapeHtml, formatPrice } from "../shared/utils.js";
 
 export function renderSiteInfo(site = {}) {
@@ -188,17 +188,24 @@ export function setDeliveryAddressVisibility(method = "pickup") {
   wrapper.hidden = method !== "delivery";
 }
 
-export function openProductModal(product) {
+export function openProductModal(product, options = {}) {
   const modal = document.querySelector("[data-product-modal]");
   if (!modal || !product) {
     return;
   }
 
+  const { qty = 0, selectedModification = null } = options;
   const image = modal.querySelector("[data-product-image]");
   const name = modal.querySelector("[data-product-name]");
   const description = modal.querySelector("[data-product-description]");
   const price = modal.querySelector("[data-product-price]");
   const addButton = modal.querySelector("[data-product-add]");
+  const weight = modal.querySelector("[data-product-weight]");
+  const tagsWrap = modal.querySelector("[data-product-tags]");
+  const modsWrap = modal.querySelector("[data-product-modifications]");
+  const modsList = modal.querySelector("[data-modifications-list]");
+  const nutritionWrap = modal.querySelector("[data-product-nutrition]");
+  const nutritionList = modal.querySelector("[data-nutrition-list]");
 
   if (image) {
     image.src = product.imageUrl || "";
@@ -210,13 +217,49 @@ export function openProductModal(product) {
   if (description) {
     description.textContent = product.description || "Описание отсутствует";
   }
+  if (weight) {
+    weight.textContent = product.weight ? `${product.weight} г` : "";
+    weight.hidden = !product.weight;
+  }
+  if (tagsWrap) {
+    const tags = (product.tags || []).slice(0, 3);
+    tagsWrap.innerHTML = tags.length
+      ? tags.map((tag) => `<span class="tag">${escapeHtml(tag.text || tag.code || "")}</span>`).join("")
+      : "";
+  }
+
+  const modifications = product.modifications || [];
+  const activeMod = selectedModification || modifications[0]?.name || "";
+  if (modsWrap && modsList) {
+    modsWrap.hidden = modifications.length === 0;
+    if (modifications.length) {
+      modsList.innerHTML = modifications
+        .map(
+          (mod) =>
+            `<button type="button" class="pill-btn ${mod.name === activeMod ? "is-active" : ""}" data-modification-btn="${escapeHtml(mod.name || mod.mealCode || "")}">${escapeHtml(mod.name || mod.mealCode || "")}</button>`,
+        )
+        .join("");
+      modal.dataset.selectedModification = activeMod;
+    } else {
+      modal.dataset.selectedModification = "";
+      modsList.innerHTML = "";
+    }
+  }
+
+  if (nutritionWrap && nutritionList) {
+    const rows = NUTRITION_KEYS.filter((row) => product[row.key]).map(
+      (row) => `<div class="nutrition-cell"><strong>${escapeHtml(String(product[row.key]))}</strong>${row.label}</div>`,
+    );
+    nutritionWrap.hidden = rows.length === 0;
+    nutritionList.innerHTML = rows.join("");
+  }
   if (price) {
     price.textContent = formatPrice(product.price);
   }
   if (addButton) {
     addButton.dataset.productCode = product.code;
     addButton.disabled = !product.isAvailable;
-    addButton.textContent = product.isAvailable ? "Добавить в корзину" : "Недоступно";
+    addButton.textContent = product.isAvailable ? (qty ? `В корзине: ${qty}` : "Добавить в корзину") : "Недоступно";
   }
 
   hideSuccessOverlay();

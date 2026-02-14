@@ -37,6 +37,14 @@ export const STORAGE_KEYS = {
   ADMIN_SESSION: "kgs_clone_admin_session_v2",
 };
 
+// Nutritional fields order for display
+export const NUTRITION_KEYS = [
+  { key: "calories", label: "ккал" },
+  { key: "proteins", label: "белки" },
+  { key: "fats", label: "жиры" },
+  { key: "carbs", label: "углеводы" },
+];
+
 export const LOG_ACTION = {
   PRODUCT_CREATE: "product_create",
   PRODUCT_UPDATE: "product_update",

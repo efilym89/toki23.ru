@@ -5,6 +5,10 @@ export function renderMenuSection(container, state) {
     return;
   }
 
+  const tagsValue = Array.isArray(state.form.tags)
+    ? state.form.tags.map((t) => t.text || t.code || "").filter(Boolean).join(", ")
+    : state.form.tags || "";
+
   const categoryOptions = state.categories
     .map(
       (category) => `<option value="${escapeHtml(category.code)}" ${state.form.categoryCode === category.code ? "selected" : ""}>${escapeHtml(category.name)}</option>`,
@@ -94,8 +98,34 @@ export function renderMenuSection(container, state) {
             <input type="number" min="1" step="1" name="price" required value="${escapeHtml(String(state.form.price || ""))}" />
           </label>
           <label>
+            Вес (г)
+            <input type="number" min="0" step="1" name="weight" value="${escapeHtml(String(state.form.weight || ""))}" />
+          </label>
+          <div class="admin-grid-2">
+            <label>
+              Ккал
+              <input type="number" min="0" step="1" name="calories" value="${escapeHtml(String(state.form.calories || ""))}" />
+            </label>
+            <label>
+              Белки
+              <input type="number" min="0" step="1" name="proteins" value="${escapeHtml(String(state.form.proteins || ""))}" />
+            </label>
+            <label>
+              Жиры
+              <input type="number" min="0" step="1" name="fats" value="${escapeHtml(String(state.form.fats || ""))}" />
+            </label>
+            <label>
+              Углеводы
+              <input type="number" min="0" step="1" name="carbs" value="${escapeHtml(String(state.form.carbs || ""))}" />
+            </label>
+          </div>
+          <label>
             Сортировка
             <input type="number" min="1" step="1" name="sortOrder" required value="${escapeHtml(String(state.form.sortOrder || 999))}" />
+          </label>
+          <label>
+            Теги (через запятую)
+            <input name="tags" value="${escapeHtml(tagsValue)}" placeholder="Новинка, Хит" />
           </label>
           <label>
             URL изображения
@@ -131,9 +161,20 @@ export function readProductForm(form) {
     description: (data.get("description") || "").toString().trim(),
     categoryCode: (data.get("categoryCode") || "").toString().trim(),
     price: Number(data.get("price") || 0),
+    weight: data.get("weight") ? Number(data.get("weight")) : null,
+    calories: data.get("calories") ? Number(data.get("calories")) : null,
+    proteins: data.get("proteins") ? Number(data.get("proteins")) : null,
+    fats: data.get("fats") ? Number(data.get("fats")) : null,
+    carbs: data.get("carbs") ? Number(data.get("carbs")) : null,
     sortOrder: Number(data.get("sortOrder") || 999),
     imageUrl: (data.get("imageUrl") || "").toString().trim(),
     isAvailable: data.get("isAvailable") === "on",
+    tags: (data.get("tags") || "")
+      .toString()
+      .split(",")
+      .map((v) => v.trim())
+      .filter(Boolean)
+      .map((text) => ({ code: text.toLowerCase().replace(/\\s+/g, "-"), text })),
   };
 }
 
@@ -148,5 +189,11 @@ export function getInitialProductForm(categories = []) {
     imageUrl: "",
     isAvailable: true,
     sortOrder: 999,
+    weight: null,
+    calories: null,
+    proteins: null,
+    fats: null,
+    carbs: null,
+    tags: "",
   };
 }
