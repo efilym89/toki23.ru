@@ -32,9 +32,9 @@ export const REPORT_PERIOD = {
 };
 
 export const STORAGE_KEYS = {
-  DB: "kgs_clone_db_v1",
-  CART: "kgs_clone_cart_v1",
-  ADMIN_SESSION: "kgs_clone_admin_session_v1",
+  DB: "kgs_clone_db_v2",
+  CART: "kgs_clone_cart_v2",
+  ADMIN_SESSION: "kgs_clone_admin_session_v2",
 };
 
 export const LOG_ACTION = {

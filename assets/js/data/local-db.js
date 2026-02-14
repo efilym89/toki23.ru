@@ -101,15 +101,88 @@ export function createLocalDb(options = {}) {
 
   let db = null;
 
+  function hasProducts(value) {
+    return Array.isArray(value?.products) && value.products.length > 0;
+  }
+
+  function hasCategories(value) {
+    return Array.isArray(value?.categories) && value.categories.length > 0;
+  }
+
+  function hasMeta(value) {
+    return Boolean(value?.meta && typeof value.meta === "object");
+  }
+
+  function ensureAdminUser() {
+    if (!Array.isArray(db.users)) {
+      db.users = [];
+    }
+    const existingAdmin = db.users.find((user) => user.id === "local-admin");
+    if (existingAdmin) {
+      existingAdmin.role = "admin";
+      existingAdmin.login = config.ADMIN_LOGIN;
+      existingAdmin.password = config.ADMIN_PASSWORD;
+      existingAdmin.name = existingAdmin.name || "Администратор";
+      return;
+    }
+
+    db.users.unshift({
+      id: "local-admin",
+      role: "admin",
+      login: config.ADMIN_LOGIN,
+      password: config.ADMIN_PASSWORD,
+      name: "Администратор",
+    });
+  }
+
+  function mergeWithSeed(baseSeed) {
+    const fallback = defaultDb(config, baseSeed);
+
+    if (!hasMeta(db)) {
+      db.meta = fallback.meta;
+    } else {
+      db.meta = {
+        ...fallback.meta,
+        ...db.meta,
+        site: db.meta.site || fallback.meta.site,
+        banners: Array.isArray(db.meta.banners) ? db.meta.banners : fallback.meta.banners,
+        theme: db.meta.theme || fallback.meta.theme,
+      };
+    }
+
+    if (!hasCategories(db)) {
+      db.categories = fallback.categories;
+    }
+
+    if (!hasProducts(db)) {
+      db.products = fallback.products;
+    }
+
+    if (!Array.isArray(db.orders)) {
+      db.orders = [];
+    }
+
+    if (!Array.isArray(db.actionLogs)) {
+      db.actionLogs = [];
+    }
+
+    ensureAdminUser();
+  }
+
   async function init() {
     if (db) {
       return;
     }
 
     const existing = parseStorage(storage, STORAGE_KEYS.DB);
-    if (existing) {
+    if (existing && typeof existing === "object") {
       db = existing;
-      syncAdminCredentials();
+      try {
+        const seed = await fetchSeed();
+        mergeWithSeed(seed);
+      } catch {
+        ensureAdminUser();
+      }
       save();
       return;
     }
@@ -117,14 +190,6 @@ export function createLocalDb(options = {}) {
     const seed = await fetchSeed();
     db = defaultDb(config, seed);
     save();
-  }
-
-  function syncAdminCredentials() {
-    const admin = db.users.find((user) => user.id === "local-admin");
-    if (admin) {
-      admin.login = config.ADMIN_LOGIN;
-      admin.password = config.ADMIN_PASSWORD;
-    }
   }
 
   function save() {
