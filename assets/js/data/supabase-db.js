@@ -239,7 +239,7 @@ export function createSupabaseDb(config) {
 
   async function createOrder(input) {
     const nowValue = new Date().toISOString();
-    const number = `KG-${Date.now().toString().slice(-7)}`;
+    const number = `TK23-${Date.now().toString().slice(-7)}`;
 
     const orderPayload = {
       number,

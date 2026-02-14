@@ -22,5 +22,8 @@ coverage/
 
 # Temporary local debug files
 .tmp*
+
+# Local image crop drafts
+assets/images/*raw*.png
 # Build output
 dist/

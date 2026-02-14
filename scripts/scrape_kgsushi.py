@@ -163,8 +163,8 @@ def normalize(data: dict, html: str) -> dict:
         "source": SOURCE_URL,
         "generatedAt": datetime.now(tz=timezone.utc).isoformat(),
         "site": {
-            "title": "Доставка роллов и суши — King Kong Sushi (Кинг Конг Суши)",
-            "brand": "King Kong Sushi",
+            "title": "Доставка роллов и суши — ТОКИ23",
+            "brand": "ТОКИ23",
             "city": (shop.get("address") or {}).get("city") or "Краснодар",
             "phone": extract_phone(html) or "+7 (800) 200-65-59",
             "address": {

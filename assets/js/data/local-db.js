@@ -305,7 +305,7 @@ export function createLocalDb(options = {}) {
   function createOrder(input) {
     const orderId = uid("ord");
     db.meta.orderCounter += 1;
-    const number = `KG-${db.meta.orderCounter}`;
+    const number = `TK23-${db.meta.orderCounter}`;
 
     const items = (input.items || []).map((item) => ({
       id: uid("itm"),

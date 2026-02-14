@@ -1,4 +1,4 @@
-﻿# toki23.ru / King Kong Sushi Clone + CRM
+﻿# toki23.ru / ТОКИ23 Clone + CRM
 
 Рабочая 1:1-по-структуре копия `kgsushi.ru` (каталог, карточка товара, корзина, checkout) + CRM/админ-панель для общепита.
 

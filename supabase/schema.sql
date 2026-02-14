@@ -1,4 +1,4 @@
-﻿-- Supabase schema for King Kong Sushi clone CRM
+﻿-- Supabase schema for ТОКИ23 clone CRM
 -- Run in SQL Editor after creating a project.
 
 create extension if not exists pgcrypto;

@@ -2,8 +2,8 @@
   "source": "https://kgsushi.ru",
   "generatedAt": "2026-02-13T17:38:48.920310+00:00",
   "site": {
-    "title": "Доставка роллов и суши — King Kong Sushi (Кинг Конг Суши)",
-    "brand": "King Kong Sushi",
+    "title": "Доставка роллов и суши — ТОКИ23",
+    "brand": "ТОКИ23",
     "city": "Краснодар",
     "phone": "+7 (800) 200-65-59",
     "address": {
@@ -72,46 +72,46 @@
   },
   "banners": [
     {
-      "id": "48993e18-3e5a-4d7d-a795-08850b0d7fd5",
-      "code": "rolly-tempura",
-      "title": "",
-      "image": "https://images2.starterapp.co/images/qyvo8mqf/production/3acc9162ee59e6e2189bfa96b5f30e5550d3cfbd-1080x1350.jpg",
+      "id": "toki23-banner-rolls-1",
+      "code": "preorder-rolls-1",
+      "title": "?????????? ?? 14 ??????? ???????",
+      "image": "./assets/images/banners/toki23-banner-rolls-1.jpg",
       "textColor": "#1c1c1c"
     },
     {
-      "id": "cadffbac-cfd2-47c5-b9d1-6a07def2b1b6",
-      "code": "referalka",
-      "title": "",
-      "image": "https://images2.starterapp.co/images/qyvo8mqf/production/ae546b5d2fa52934f6a4197de267aa2c88b163cc-618x816.jpg",
-      "textColor": "#1c1c1c"
+      "id": "toki23-banner-rolls-2",
+      "code": "preorder-rolls-2",
+      "title": "?????????? ?? 14 ??????? ???????",
+      "image": "./assets/images/banners/toki23-banner-rolls-2.jpg",
+      "textColor": "#ffffff"
     },
     {
-      "id": "90917aa8-c14c-4f45-8d4f-a96aed26c03d",
-      "code": "pervyi-zakaz",
-      "title": "",
-      "image": "https://images2.starterapp.co/images/qyvo8mqf/production/395213c1f16eb07d9c97fd67927451e230a355e6-618x816.jpg",
-      "textColor": "#1c1c1c"
+      "id": "toki23-banner-heart-cat",
+      "code": "valentine-heart-cat",
+      "title": "? ???? ???? ??????????",
+      "image": "./assets/images/banners/toki23-banner-heart-cat.jpg",
+      "textColor": "#c04d63"
     },
     {
-      "id": "cccf444c-4e25-437a-b737-5ddf76261c2f",
-      "code": "zapolni-anketu-100-ballov",
-      "title": "",
-      "image": "https://images2.starterapp.co/images/qyvo8mqf/production/f62594c5dde0f5030371785f7d62c5d487ecff2d-618x816.jpg",
-      "textColor": "#1c1c1c"
+      "id": "toki23-banner-postcard",
+      "code": "valentine-postcard",
+      "title": "??????????? ????????",
+      "image": "./assets/images/banners/toki23-banner-postcard.jpg",
+      "textColor": "#7f5d58"
     },
     {
-      "id": "4bf6ad48-4c94-4f2c-934f-57da6b8a8ea2",
-      "code": "500-ballov-na-dr",
-      "title": "",
-      "image": "https://images2.starterapp.co/images/qyvo8mqf/production/4b843d0d37dde666b3d4a008489c3ca862060bc1-618x816.jpg",
-      "textColor": "#1c1c1c"
+      "id": "toki23-banner-promo-10",
+      "code": "promo-10toki",
+      "title": "10% ?? ??? ????",
+      "image": "./assets/images/banners/toki23-banner-promo-10.jpg",
+      "textColor": "#101010"
     },
     {
-      "id": "abd822c4-6857-4a3d-bddc-016ae74694e5",
-      "code": "ugosheniya-dlya-vashikh-pitomcev1",
-      "title": "",
-      "image": "https://images2.starterapp.co/images/qyvo8mqf/production/9b595b9b456942e2c53c2f10b8f34db4544bf1e4-1080x1920.jpg",
-      "textColor": "#1c1c1c"
+      "id": "toki23-banner-cat-watercolor",
+      "code": "cat-valentine-watercolor",
+      "title": "? ???? ???? ??????????",
+      "image": "./assets/images/banners/toki23-banner-cat-watercolor.jpg",
+      "textColor": "#c2556d"
     }
   ],
   "categories": [

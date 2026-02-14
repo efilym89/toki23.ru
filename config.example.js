@@ -12,7 +12,7 @@ window.APP_CONFIG = {
   ADMIN_LOGIN: "admin",
   ADMIN_PASSWORD: "admin123",
 
-  SHOP_NAME: "King Kong Sushi",
+  SHOP_NAME: "ТОКИ23",
   SUPPORT_PHONE: "+7 (800) 200-65-59",
   CURRENCY_SYMBOL: "₽",
 };

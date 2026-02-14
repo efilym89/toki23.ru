@@ -8,7 +8,7 @@ export function renderSiteInfo(site = {}) {
   const workNode = document.querySelector("[data-site-working-hours]");
 
   for (const node of brandNodes) {
-    node.textContent = site.brand || "King Kong Sushi";
+    node.textContent = site.brand || "ТОКИ23";
   }
 
   for (const node of phoneNodes) {
