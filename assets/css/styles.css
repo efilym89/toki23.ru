@@ -459,13 +459,10 @@ a:focus-visible {
 
 .category-row {
   display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding: 0 4px 8px;
-  margin-bottom: 14px;
-  scrollbar-width: thin;
-  scroll-snap-type: x proximity;
-  mask-image: linear-gradient(to right, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: 0;
+  margin-bottom: var(--space-3);
 }
 
 .category-chip {
@@ -476,7 +473,6 @@ a:focus-visible {
   white-space: nowrap;
   cursor: pointer;
   font-weight: 500;
-  scroll-snap-align: start;
   transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
