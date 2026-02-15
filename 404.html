@@ -1,0 +1,188 @@
+﻿<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ТОКИ23 — доставка роллов и суши</title>
+    <meta name="description" content="Доставка роллов и суши ТОКИ23. Самовывоз и доставка по Краснодару." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./assets/css/styles.css?v=20260215-1" />
+    <script>
+      window.APP_CONFIG = window.APP_CONFIG || {};
+      (function loadRuntimeConfig() {
+        const script = document.createElement("script");
+        script.src = "./config.js?v=20260215-1";
+        script.defer = true;
+        script.onerror = function noop() {};
+        document.head.append(script);
+      })();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/zod@3.24.1/lib/index.umd.min.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container site-header__inner">
+        <a class="brand" href="./">
+          <span class="brand__icon"><img src="./assets/images/brand-toki23.png" alt="ТОКИ23" /></span>
+          <span data-site-brand>ТОКИ23</span>
+        </a>
+        <div class="header-meta">
+          <p>
+            <strong>Адрес:</strong>
+            <span data-site-address>Краснодар, Бабушкина, 252</span>
+          </p>
+          <p>
+            <strong>Работаем:</strong>
+            <span data-site-working-hours>11:00 - 22:45</span>
+          </p>
+        </div>
+        <div class="header-actions">
+          <a class="phone-link" data-site-phone href="tel:+78002006559">+7 (800) 200-65-59</a>
+          <button class="btn" data-open-cart>
+            Корзина <span class="cart-counter" data-cart-count>0</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero hero--404">
+        <div class="container hero__inner">
+          <div class="hero-copy">
+            <p class="hero-subtitle">Страница не найдена</p>
+            <h1>Упс, такой страницы нет</h1>
+            <p>Проверьте адрес или вернитесь на главную, чтобы оформить заказ.</p>
+            <div class="hero-actions">
+              <a class="btn btn--light" href="./">Вернуться на главную</a>
+              <a class="btn btn--ghost-light" href="./admin.html">CRM / Admin</a>
+            </div>
+          </div>
+          <div class="hero-visual">
+            <div class="hero-main-image" data-hero-image></div>
+            <div class="banner-grid" data-banners data-promo-bg></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <button class="cart-float" data-open-cart>
+      <span>Корзина</span>
+      <strong data-cart-count>0</strong>
+    </button>
+
+    <aside class="cart-drawer" data-cart-drawer hidden>
+      <div class="cart-drawer__panel">
+        <header>
+          <h2>Корзина</h2>
+          <button class="icon-btn" data-close-cart>✕</button>
+        </header>
+        <ul class="cart-list" data-cart-items></ul>
+
+        <div class="cart-total-row">
+          <span>Итого</span>
+          <strong data-cart-total>0 ₽</strong>
+        </div>
+
+        <form class="checkout-form" data-checkout-form>
+          <h3>Оформление заказа</h3>
+          <div class="method-row" data-order-methods></div>
+          <label>
+            Имя
+            <input name="customerName" required minlength="2" />
+          </label>
+          <label>
+            Телефон
+            <input name="phone" required placeholder="+7 (___) ___-__-__" />
+          </label>
+          <label data-address-wrapper hidden>
+            Адрес доставки
+            <input name="address" />
+          </label>
+          <label>
+            Комментарий
+            <textarea name="comment" rows="2" placeholder="Комментарий к заказу"></textarea>
+          </label>
+          <button class="btn btn--wide" data-checkout-submit>Оформить заказ</button>
+        </form>
+      </div>
+    </aside>
+
+    <div class="product-modal" data-product-modal hidden>
+      <div class="product-modal__card">
+        <button class="icon-btn product-modal__close" data-product-close>✕</button>
+        <div class="product-modal__media">
+          <img data-product-image alt="product" />
+        </div>
+        <div class="product-modal__body">
+          <div class="product-modal__header">
+            <div>
+              <h3 data-product-name></h3>
+              <p class="product-modal__weight" data-product-weight></p>
+            </div>
+            <div class="tag-row" data-product-tags></div>
+          </div>
+          <p data-product-description class="product-modal__description"></p>
+
+          <div class="product-modal__section" data-product-modifications hidden>
+            <h4>Размер</h4>
+            <div class="pill-row" data-modifications-list></div>
+          </div>
+
+          <div class="product-modal__section" data-product-nutrition hidden>
+            <div class="nutrition-grid" data-nutrition-list></div>
+          </div>
+
+          <div class="product-modal__footer">
+            <strong data-product-price></strong>
+            <button class="btn" data-product-add>Добавить в корзину</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="success-overlay" data-success-overlay hidden>
+      <div class="success-card">
+        <h2>Заказ принят</h2>
+        <p>
+          Спасибо! Номер заказа:
+          <strong data-success-order>TK23-0000</strong>
+        </p>
+        <button class="btn" data-success-close>Закрыть</button>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <div class="container site-footer__grid">
+        <div>
+          <a class="brand" href="./">
+            <span class="brand__icon"><img src="./assets/images/brand-toki23.png" alt="ТОКИ23" /></span>
+            <span data-site-brand>ТОКИ23</span>
+          </a>
+          <p class="muted" data-site-footer-text>Доставка роллов и суши в Краснодаре.</p>
+        </div>
+        <div class="site-footer__contacts">
+          <div>
+            <p class="muted">Телефон</p>
+            <a class="phone-link" data-site-phone href="tel:+78002006559">+7 (800) 200-65-59</a>
+          </div>
+          <div>
+            <p class="muted">Адрес</p>
+            <span data-site-address>Краснодар, Бабушкина, 252</span>
+          </div>
+          <div>
+            <p class="muted">Время работы</p>
+            <span data-site-working-hours>11:00 - 22:45</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script type="module" src="./assets/js/public/app.js?v=20260215-1"></script>
+  </body>
+</html>
