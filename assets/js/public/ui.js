@@ -27,6 +27,11 @@ export function renderSiteInfo(site = {}) {
     const work = site.workingHours || { from: "11:00", to: "22:45" };
     workNode.textContent = `${work.from} - ${work.to}`;
   }
+
+  const footerTextNode = document.querySelector("[data-site-footer-text]");
+  if (footerTextNode) {
+    footerTextNode.textContent = site.footerText || "Доставка роллов и суши в Краснодаре.";
+  }
 }
 
 export function renderBanners(banners = []) {
@@ -35,7 +40,8 @@ export function renderBanners(banners = []) {
     return;
   }
 
-  const list = banners.filter((banner) => banner.image).slice(0, 6);
+  const limit = typeof window !== "undefined" && window.innerWidth < 640 ? 4 : 6;
+  const list = banners.filter((banner) => banner.image).slice(0, limit);
   if (!list.length) {
     container.innerHTML = "";
     return;

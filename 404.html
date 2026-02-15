@@ -52,33 +52,19 @@
     </header>
 
     <main>
-      <section class="hero">
+      <section class="hero hero--404">
         <div class="container hero__inner">
           <div class="hero-copy">
-            <p class="hero-subtitle">Доставка роллов и суши</p>
-            <h1>Меню <span data-site-brand>ТОКИ23</span></h1>
-            <p>Работаем ежедневно. Оформляйте заказ на самовывоз или доставку за пару минут.</p>
+            <p class="hero-subtitle">Страница не найдена</p>
+            <h1>Упс, такой страницы нет</h1>
+            <p>Проверьте адрес или вернитесь на главную, чтобы оформить заказ.</p>
             <div class="hero-actions">
-              <button class="btn btn--light" data-open-cart>Оформить заказ</button>
+              <a class="btn btn--light" href="./">Вернуться на главную</a>
               <a class="btn btn--ghost-light" href="./admin.html">CRM / Admin</a>
             </div>
           </div>
           <div class="banner-grid" data-banners></div>
         </div>
-      </section>
-
-      <section class="catalog container">
-        <div class="catalog-toolbar">
-          <input type="search" placeholder="Поиск по меню" data-search />
-          <label class="inline-checkbox">
-            <input type="checkbox" data-available-toggle />
-            Только доступные
-          </label>
-        </div>
-
-        <div class="category-row" data-categories></div>
-        <div class="products-grid" data-products></div>
-        <div class="pager-wrap" data-products-pager></div>
       </section>
     </main>
 
@@ -127,7 +113,9 @@
     <div class="product-modal" data-product-modal hidden>
       <div class="product-modal__card">
         <button class="icon-btn product-modal__close" data-product-close>✕</button>
-        <img data-product-image alt="product" />
+        <div class="product-modal__media">
+          <img data-product-image alt="product" />
+        </div>
         <div class="product-modal__body">
           <div class="product-modal__header">
             <div>
@@ -165,6 +153,32 @@
         <button class="btn" data-success-close>Закрыть</button>
       </div>
     </div>
+
+    <footer class="site-footer">
+      <div class="container site-footer__grid">
+        <div>
+          <a class="brand" href="./">
+            <span class="brand__icon"><img src="./assets/images/brand-toki23.png" alt="ТОКИ23" /></span>
+            <span data-site-brand>ТОКИ23</span>
+          </a>
+          <p class="muted" data-site-footer-text>Доставка роллов и суши в Краснодаре.</p>
+        </div>
+        <div class="site-footer__contacts">
+          <div>
+            <p class="muted">Телефон</p>
+            <a class="phone-link" data-site-phone href="tel:+78002006559">+7 (800) 200-65-59</a>
+          </div>
+          <div>
+            <p class="muted">Адрес</p>
+            <span data-site-address>Краснодар, Бабушкина, 252</span>
+          </div>
+          <div>
+            <p class="muted">Время работы</p>
+            <span data-site-working-hours>11:00 - 22:45</span>
+          </div>
+        </div>
+      </div>
+    </footer>
 
     <script type="module" src="./assets/js/public/app.js?v=20260214-6"></script>
   </body>
