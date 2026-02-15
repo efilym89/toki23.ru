@@ -10,6 +10,7 @@ import { renderOrdersSection } from "./orders.js";
 import { renderReportsSection } from "./reports.js";
 import { renderLogsSection } from "./logs.js";
 import { getCurrentAdmin, loginAdmin, logoutAdmin } from "./auth.js";
+import { renderSettingsSection, readSettingsForm } from "./settings.js";
 
 const state = {
   admin: null,
@@ -42,6 +43,9 @@ const state = {
     logs: { items: [], pagination: { page: 1, totalPages: 1 } },
     page: 1,
   },
+  settings: {
+    site: {},
+  },
 };
 
 async function boot() {
@@ -59,7 +63,7 @@ async function boot() {
 }
 
 async function hydrateAll() {
-  await Promise.all([loadDashboard(), loadMenu(), loadOrders(), loadReport(), loadLogs()]);
+  await Promise.all([loadDashboard(), loadMenu(), loadOrders(), loadReport(), loadLogs(), loadSettings()]);
   renderAll();
 }
 
@@ -111,6 +115,10 @@ async function loadLogs() {
   });
 }
 
+async function loadSettings() {
+  state.settings.site = await getRepository().getSiteSettings();
+}
+
 function showLoginPanel() {
   document.querySelector("[data-admin-login]").hidden = false;
   document.querySelector("[data-admin-panel]").hidden = true;
@@ -136,6 +144,7 @@ function renderTabs() {
     ["orders", "Заказы"],
     ["reports", "Отчёты"],
     ["logs", "Журнал"],
+    ["settings", "Настройки"],
   ]
     .map(
       ([code, label]) =>
@@ -168,8 +177,13 @@ function renderActiveTab() {
     return;
   }
 
-  renderLogsSection(container, state.logs);
-  renderPagination("[data-admin-logs-pager]", state.logs.logs.pagination, "admin-logs");
+  if (state.tab === "logs") {
+    renderLogsSection(container, state.logs);
+    renderPagination("[data-admin-logs-pager]", state.logs.logs.pagination, "admin-logs");
+    return;
+  }
+
+  renderSettingsSection(container, state.settings);
 }
 
 function bindGlobalEvents() {
@@ -226,6 +240,19 @@ async function onSubmit(event) {
     state.reports.to = (data.get("to") || "").toString();
     await loadReport();
     renderActiveTab();
+  }
+
+  if (event.target.matches("[data-settings-form]")) {
+    event.preventDefault();
+    const payload = readSettingsForm(event.target);
+    try {
+      await getRepository().updateSiteSettings(payload, state.admin?.login || "admin");
+      await loadSettings();
+      renderActiveTab();
+      toast("Настройки сохранены", "success");
+    } catch (error) {
+      toast(error.message || "Не удалось сохранить настройки", "error");
+    }
   }
 }
 
@@ -424,6 +451,30 @@ async function onChange(event) {
       state.menu.form.imageUrl = dataUrl;
       renderActiveTab();
       toast("Изображение загружено", "success");
+    }
+  }
+
+  const heroFile = event.target.closest("[data-settings-hero-file]");
+  if (heroFile && heroFile.files?.[0]) {
+    const dataUrl = await fileToDataUrl(heroFile.files[0]);
+    const input = document.querySelector("[data-settings-form] input[name='heroImage']");
+    if (input) {
+      input.value = dataUrl;
+      state.settings.site.heroImage = dataUrl;
+      renderActiveTab();
+      toast("Hero обновлен", "success");
+    }
+  }
+
+  const promoFile = event.target.closest("[data-settings-promo-file]");
+  if (promoFile && promoFile.files?.[0]) {
+    const dataUrl = await fileToDataUrl(promoFile.files[0]);
+    const input = document.querySelector("[data-settings-form] input[name='promoBackground']");
+    if (input) {
+      input.value = dataUrl;
+      state.settings.site.promoBackground = dataUrl;
+      renderActiveTab();
+      toast("Фон акций обновлен", "success");
     }
   }
 }

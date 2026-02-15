@@ -19,6 +19,8 @@ import {
   renderPagination,
   renderProducts,
   renderSiteInfo,
+  renderHeroImage,
+  renderPromoBackground,
   setDeliveryAddressVisibility,
   showSuccessOverlay,
   updateCartCounter,
@@ -44,7 +46,10 @@ async function boot() {
   const repo = getRepository();
 
   const snapshot = await repo.getSiteSnapshot();
-  renderSiteInfo(snapshot.site || {});
+  const site = snapshot.site || {};
+  renderSiteInfo(site);
+  renderHeroImage(site.heroImage || (snapshot.banners?.[0]?.image ?? ""));
+  renderPromoBackground(site.promoBackground || "");
   renderBanners(snapshot.banners || []);
 
   state.categories = await repo.getCategories();

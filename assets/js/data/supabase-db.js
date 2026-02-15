@@ -79,6 +79,15 @@ export function createSupabaseDb(config) {
     };
   }
 
+  async function getSiteSettings() {
+    const snapshot = await getSiteSnapshot();
+    return snapshot.site || {};
+  }
+
+  async function updateSiteSettings() {
+    throw new Error("Редактирование настроек доступно только в локальном режиме");
+  }
+
   async function getCategories() {
     const { data, error } = await client
       .from("categories")
@@ -681,6 +690,8 @@ export function createSupabaseDb(config) {
   return {
     init,
     getSiteSnapshot,
+    getSiteSettings,
+    updateSiteSettings,
     getCategories,
     listCategories,
     getProducts,

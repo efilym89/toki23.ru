@@ -54,4 +54,5 @@ export const LOG_ACTION = {
   CATEGORY_DELETE: "category_delete",
   ORDER_STATUS_UPDATE: "order_status_update",
   ORDER_PAYMENT_UPDATE: "order_payment_update",
+  SITE_SETTINGS_UPDATE: "site_settings_update",
 };

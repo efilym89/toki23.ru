@@ -34,6 +34,34 @@ export function renderSiteInfo(site = {}) {
   }
 }
 
+export function renderHeroImage(url = "") {
+  const node = document.querySelector("[data-hero-image]");
+  if (!node) {
+    return;
+  }
+  if (url) {
+    node.style.setProperty("--hero-image", `url("${escapeHtml(url)}")`);
+    node.classList.remove("is-empty");
+  } else {
+    node.style.removeProperty("--hero-image");
+    node.classList.add("is-empty");
+  }
+}
+
+export function renderPromoBackground(url = "") {
+  const node = document.querySelector("[data-promo-bg]");
+  if (!node) {
+    return;
+  }
+  if (url) {
+    node.style.backgroundImage = `url("${escapeHtml(url)}")`;
+    node.style.backgroundSize = "cover";
+    node.style.backgroundPosition = "center";
+  } else {
+    node.style.backgroundImage = "none";
+  }
+}
+
 export function renderBanners(banners = []) {
   const container = document.querySelector("[data-banners]");
   if (!container) {

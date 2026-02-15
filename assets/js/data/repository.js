@@ -36,3 +36,11 @@ export function getRepository() {
 export function isUsingSupabase() {
   return activeDb !== localDb;
 }
+
+export function getSiteSettings() {
+  return activeDb.getSiteSettings();
+}
+
+export function updateSiteSettings(payload, user = "admin") {
+  return activeDb.updateSiteSettings(payload, user);
+}

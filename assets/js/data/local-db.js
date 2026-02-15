@@ -11,6 +11,13 @@ import {
 } from "../shared/utils.js";
 
 function defaultDb(config, seed = null) {
+  const applySiteDefaults = (site = {}) => ({
+    ...site,
+    heroImage: site.heroImage || "",
+    promoBackground: site.promoBackground || "",
+    footerText: site.footerText || `${config.SHOP_NAME || "ТОКИ23"} — доставка роллов и суши`,
+  });
+
   const categories = sortBySortOrder(seed?.categories || []).map((item) => ({
     id: item.id || item.code,
     code: item.code,
@@ -54,7 +61,7 @@ function defaultDb(config, seed = null) {
     meta: {
       version: 1,
       orderCounter: 1000,
-      site: seed?.site || {},
+      site: applySiteDefaults(seed?.site || {}),
       banners: seed?.banners || [],
       theme: seed?.theme || {},
       generatedAt: seed?.generatedAt || null,
@@ -153,6 +160,8 @@ export function createLocalDb(options = {}) {
       };
     }
 
+    db.meta.site = applySiteDefaults(db.meta.site || {});
+
     if (!hasCategories(db)) {
       db.categories = fallback.categories;
     }
@@ -206,6 +215,35 @@ export function createLocalDb(options = {}) {
       theme: db.meta.theme,
       generatedAt: db.meta.generatedAt,
     };
+  }
+
+  function getSiteSettings() {
+    return { ...db.meta.site };
+  }
+
+  function updateSiteSettings(input = {}, user = "admin") {
+    const current = db.meta.site || {};
+    db.meta.site = {
+      ...current,
+      title: input.title ?? current.title,
+      brand: input.brand ?? current.brand,
+      city: input.city ?? current.city,
+      phone: input.phone ?? current.phone,
+      address: {
+        ...(current.address || {}),
+        ...(input.address || {}),
+      },
+      workingHours: {
+        ...(current.workingHours || {}),
+        ...(input.workingHours || {}),
+      },
+      heroImage: input.heroImage !== undefined ? input.heroImage : current.heroImage,
+      promoBackground: input.promoBackground !== undefined ? input.promoBackground : current.promoBackground,
+      footerText: input.footerText !== undefined ? input.footerText : current.footerText,
+    };
+    save();
+    logAction(LOG_ACTION.SITE_SETTINGS_UPDATE, "site", "site", user, {});
+    return getSiteSettings();
   }
 
   function getCategories() {
@@ -609,6 +647,8 @@ export function createLocalDb(options = {}) {
   return {
     init,
     getSiteSnapshot,
+    getSiteSettings,
+    updateSiteSettings,
     getCategories,
     listCategories,
     getProducts,
